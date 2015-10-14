@@ -74,7 +74,7 @@ public class Plane implements JSONAware{
 
             obj.put("point", point);
             obj.put("radius", point.getRadius());
-            obj.put("neighbours", point.getNeighbours());
+            obj.put("neighbours", point.getNeighboursCount());
 
             array.add(obj);
         }

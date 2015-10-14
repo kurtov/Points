@@ -10,8 +10,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONValue;
 
 public class Main {
-    public static final String DEFAULT_INPUT_FILE = "input/default_data.json";
-    private static final String DEFAULT_OUTPUT_FILE = "result.json";
+    public static final String DEFAULT_INPUT_FILE = "data/default.json";
+    private static final String DEFAULT_OUTPUT_FILE = "data/result.json";
 
     public static void main(String[] args) throws FileNotFoundException {
         Plane plane = new Plane();
@@ -49,6 +49,7 @@ public class Main {
             }
         }
         
+        //На основе считанного файла создать точки и добавить их на плоскость
         Iterator<JSONArray> arrIter = array.iterator();
         while(arrIter.hasNext()) {
             JSONArray pointArray = arrIter.next();

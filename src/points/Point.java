@@ -46,7 +46,11 @@ public class Point implements JSONAware{
         
     public ArrayList<Point> getNeighbours() {
         return plane.getNeighbours(this);
-        }
+    }
+    
+    public int getNeighboursCount() {
+        return this.getNeighbours().size();
+    }    
     
     long dist(Point p) {
         return (long)Math.sqrt(Math.pow(x - p.getX(), 2) + Math.pow(y - p.getY(), 2));
