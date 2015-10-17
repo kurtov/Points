@@ -7,7 +7,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONAware;
 import org.json.simple.JSONObject;
 
-public class Plane implements JSONAware{
+public class Plane implements JSONAware, Iterable{
     ArrayList<Point> points = new ArrayList<>();
     ArrayList<ArrayList<Long>> matrix = new ArrayList<>();
     int size;
@@ -48,6 +48,9 @@ public class Plane implements JSONAware{
             return neighbours;
         }
         
+        //Что бы найти все расстояния от точки с индексом index
+        //надо в строке index пройти все элементы с 0 по index-1
+        //затем в столбце index пройти все элементы с index+1 до конца
         distances = matrix.get(index);
         for(int i = 0; i < index; i++) {
             if(distances.get(i) <= neighbourRradius) {
@@ -67,7 +70,7 @@ public class Plane implements JSONAware{
         JSONArray array = new JSONArray();
         
         
-        Iterator<Point> iter = this.points.iterator();
+        Iterator<Point> iter = this.iterator();
         while(iter.hasNext()) {
             Point point = iter.next();
             JSONObject obj = new JSONObject();
@@ -80,5 +83,9 @@ public class Plane implements JSONAware{
         }
       
         return array.toString();
+    }
+
+    public Iterator iterator() {
+        return this.points.iterator();
     }
 }
