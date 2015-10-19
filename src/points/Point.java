@@ -3,11 +3,12 @@ package points;
 import java.util.ArrayList;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONAware;
+import vptree.VpTreePoint;
 
-public class Point implements JSONAware{
+public class Point implements JSONAware, VpTreePoint<Point>{
     private final int x;
     private final int y;
-    private long radius;
+    private double radius;
     private int index;
     private Plane plane;
 
@@ -23,11 +24,11 @@ public class Point implements JSONAware{
         this.plane = plane;
     }
     
-    public long getRadius() {
+    public double getRadius() {
         return radius;
     }
 
-    public void setRadius(long radius) {
+    public void setRadius(double radius) {
         this.radius = radius;
     }
     
@@ -52,8 +53,8 @@ public class Point implements JSONAware{
         return this.getNeighbours().size();
     }    
     
-    long dist(Point p) {
-        return (long)Math.sqrt(Math.pow(x - p.getX(), 2) + Math.pow(y - p.getY(), 2));
+    public double distance(Point p) {
+        return Math.sqrt(Math.pow(x - p.getX(), 2) + Math.pow(y - p.getY(), 2));
     }
     
     

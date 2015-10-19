@@ -9,12 +9,12 @@ import org.json.simple.JSONObject;
 
 public class Plane implements JSONAware, Iterable{
     ArrayList<Point> points = new ArrayList<>();
-    ArrayList<ArrayList<Long>> matrix = new ArrayList<>();
+    ArrayList<ArrayList<Double>> matrix = new ArrayList<>();
     int size;
     
     void add(Point point) {
         int index = size++;
-        ArrayList<Long> distances = new ArrayList<>(index);
+        ArrayList<Double> distances = new ArrayList<>(index);
         
         points.add(point);
         point.setIndex(index);
@@ -22,7 +22,7 @@ public class Plane implements JSONAware, Iterable{
         
         for(int i=0; i<index; i++) {
             Point p = points.get(i);
-            long distance = point.dist(p);
+            double distance = point.distance(p);
             
             p.setRadius(index == 1 ? distance : Math.min(p.getRadius(), distance));
             distances.add(distance);
@@ -39,10 +39,10 @@ public class Plane implements JSONAware, Iterable{
     }
     
     ArrayList<Point> getNeighbours(Point point) {
-        long neighbourRradius = 2 * point.getRadius();
+        double neighbourRradius = 2 * point.getRadius();
         int index = point.getIndex();
         ArrayList<Point> neighbours = new ArrayList<>();
-        ArrayList<Long> distances;
+        ArrayList<Double> distances;
         
         if(size < 2) {
             return neighbours;
