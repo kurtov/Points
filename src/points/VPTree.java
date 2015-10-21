@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import vptree.VpTreeNode;
 
-public class VPRadius {
+public class VPTree {
     
     private static VpTreeNode<Point> root;
     

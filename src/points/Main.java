@@ -38,9 +38,9 @@ public class Main {
         writeFile(s1, outputFileName);
 
         start = System.nanoTime();
-        VPRadius.buildVPTree(points);    //Построить VP-tree
-        VPRadius.calcRadius(points);     //Найти радиусы
-        VPRadius.calcNeighboursCount(points); //Найти соседей
+        VPTree.buildVPTree(points);    //Построить VP-tree
+        VPTree.calcRadius(points);     //Найти радиусы
+        VPTree.calcNeighboursCount(points); //Найти соседей
         System.out.println("VP-tree search completed, took " + (System.nanoTime() - start) + " ns");
         String s2 = pointsToJSONString(points);
         System.out.println("Result is same: " + s1.equals(s2));
