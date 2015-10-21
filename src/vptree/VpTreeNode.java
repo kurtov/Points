@@ -155,4 +155,24 @@ public final class VpTreeNode<T extends VpTreePoint<T>> {
 
         return sigmaSq;
     }
+    
+    public T getVantagePoint() {
+        return vantagePoint;
+    }
+    
+    public VpTreeNode<T> getLeft() {
+        return left;
+    }
+    
+    public VpTreeNode<T> getRight() {
+        return right;
+    }
+    
+    public double getLeftRadius() {
+        return leftRadius;
+    }
+    
+    public List<T> getPoints() {
+        return points;
+    }
 }
