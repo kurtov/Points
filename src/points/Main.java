@@ -1,16 +1,14 @@
 package points;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
-import vptree.VpTreeNode;
+
 
 public class Main {
     public static final String DEFAULT_INPUT_FILE = "data/default.json";
@@ -23,6 +21,7 @@ public class Main {
         String inputFileName;
         String outputFileName;
         JSONArray array = null;
+        ArrayList<Point> points = new ArrayList();
         
        
         if(args.length == 2) {
@@ -52,27 +51,34 @@ public class Main {
             }
         }
         
-        //На основе считанного файла создать точки и добавить их на плоскость
+        
         Iterator<JSONArray> arrIter = array.iterator();
         while(arrIter.hasNext()) {
             JSONArray pointArray = arrIter.next();
            
-            plane.add( new Point(
+            points.add( new Point(
                 (int)(long)pointArray.get(0),
                 (int)(long)pointArray.get(1)
             ));
         }
+        
+        
+        
+        
 
         long start = System.nanoTime();
-        String s1 = linear(plane);
+        plane.add(points);
+        plane.calcNeighboursCount();
         System.out.println("Linear search completed, took " + (System.nanoTime() - start) + " ns");
+        String s1 = pointsToJSONString(points);
         writeFile(s1, outputFileName);
 
-
         start = System.nanoTime();
-        String s2 = vptree(plane.getPoints());
+        VPRadius.buildVPTree(points);
+        VPRadius.calcRadius(points);
+        VPRadius.calcNeighboursCount(points);
         System.out.println("VP-tree search completed, took " + (System.nanoTime() - start) + " ns");
-
+        String s2 = pointsToJSONString(points);
         System.out.println("Result is same: " + s1.equals(s2));
 
     }
@@ -86,26 +92,14 @@ public class Main {
             System.err.println("IO Exception with output file");
         }
     }
+
     
-    static String linear(Plane plane) {
-        return plane.toJSONString();
-    }
-    
-    static String vptree(ArrayList<Point> points) {
+    static String pointsToJSONString(ArrayList<Point> points) {
         JSONArray array = new JSONArray();
-        VpTreeNode<Point> node = VpTreeNode.buildVpTree(points);
-
         Iterator<Point> iter = points.iterator();
+        
         while(iter.hasNext()) {
-            Point p = iter.next();
-            
-            JSONObject obj = new JSONObject();
-
-            obj.put("point", p);
-            obj.put("radius", p.getRadius());
-            obj.put("neighbours", node.findNearbyPoints(p, p.getRadius() * 2).size() - 1);
-
-            array.add(obj);   
+            array.add(iter.next());
         }
         
         return array.toJSONString();
