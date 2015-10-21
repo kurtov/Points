@@ -66,6 +66,11 @@ public class VPRadius {
                 }
             }
             
+            //Для случая одной точки. 
+            if (radius == Double.POSITIVE_INFINITY) {
+                radius = 0;
+            }
+                
             point.setRadius(radius);
         }
     }
