@@ -16,14 +16,10 @@ public class Main {
 
     public static void main(String[] args) {
         Plane plane = new Plane();
-        BufferedReader in = null;
-        PrintWriter out = null;
         String inputFileName;
         String outputFileName;
-        JSONArray array = null;
-        ArrayList<Point> points = new ArrayList();
+        ArrayList<Point> points;
         
-       
         if(args.length == 2) {
             inputFileName = args[0];
             outputFileName = args[1];
@@ -32,10 +28,33 @@ public class Main {
             outputFileName = DEFAULT_OUTPUT_FILE;
         }
         
-        //Считать из входного файла данные в массив array
+        points = readFile(inputFileName);
+
+        long start = System.nanoTime();
+        plane.add(points);               //Добавить точки на плоскость и найти радиусы
+        plane.calcNeighboursCount();     //Найти соседей
+        System.out.println("Linear search completed, took " + (System.nanoTime() - start) + " ns");
+        String s1 = pointsToJSONString(points);
+        writeFile(s1, outputFileName);
+
+        start = System.nanoTime();
+        VPRadius.buildVPTree(points);    //Построить VP-tree
+        VPRadius.calcRadius(points);     //Найти радиусы
+        VPRadius.calcNeighboursCount(points); //Найти соседей
+        System.out.println("VP-tree search completed, took " + (System.nanoTime() - start) + " ns");
+        String s2 = pointsToJSONString(points);
+        System.out.println("Result is same: " + s1.equals(s2));
+
+    }
+    
+    static ArrayList<Point> readFile(String fileName) {
+        BufferedReader in = null;
+        JSONArray array = null;
+        ArrayList<Point> points = new ArrayList();
+        
         try {
-            in = new BufferedReader(new FileReader(inputFileName));
-            array = (JSONArray)JSONValue.parse(new BufferedReader(new FileReader(inputFileName)));
+            in = new BufferedReader(new FileReader(fileName));
+            array = (JSONArray)JSONValue.parse(new BufferedReader(new FileReader(fileName)));
             in.close();
         }
         catch (IOException e) {
@@ -61,26 +80,8 @@ public class Main {
                 (int)(long)pointArray.get(1)
             ));
         }
-        
-        
-        
-        
 
-        long start = System.nanoTime();
-        plane.add(points);
-        plane.calcNeighboursCount();
-        System.out.println("Linear search completed, took " + (System.nanoTime() - start) + " ns");
-        String s1 = pointsToJSONString(points);
-        writeFile(s1, outputFileName);
-
-        start = System.nanoTime();
-        VPRadius.buildVPTree(points);
-        VPRadius.calcRadius(points);
-        VPRadius.calcNeighboursCount(points);
-        System.out.println("VP-tree search completed, took " + (System.nanoTime() - start) + " ns");
-        String s2 = pointsToJSONString(points);
-        System.out.println("Result is same: " + s1.equals(s2));
-
+        return points;
     }
     
     static void writeFile(String str, String fileName) {
